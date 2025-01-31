@@ -4,7 +4,7 @@
 # Requirements:
     # Create HTML forms for user input (search queries, article selection)
     # Implement client-side form validation
-    # Develop Flask routes for CRUD operations (create, read, update, delete)
-    # Store data in PostgreSQL database
+    # Develop routes for CRUD operations (create, read, update, delete)
+    # Store data in SQL-related database
 
 # Compound Work: Integrate web scraping from previous weeks with form handling
