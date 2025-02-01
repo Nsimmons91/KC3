@@ -26,79 +26,112 @@ Activate click on submit ID and conditionally do these things
 */
 
 // make success icons invisible
-const successIcon = document.getElementsByClassName("far fa-check-circle success-icon");
-for (let i = 0; i < successIcon.length; i++){
-  successIcon[i].style.visibility = 'hidden'
-};
 
-// access the failure icon
-const failureIcon = document.getElementsByClassName("fas fa-exclamation-circle failure-icon");
 
-// valid email
+
+
+// Access the success and failure icons
+const successIcons = document.getElementsByClassName("far fa-check-circle success-icon");
+const failureIcons = document.getElementsByClassName("fas fa-exclamation-circle failure-icon");
+
+
+// Hide success icons initially
+successIcons[0].style.visibility = 'hidden';
+successIcons[1].style.visibility = 'hidden';
+successIcons[2].style.visibility = 'hidden';
+
+
+// Hide failure icons initially
+failureIcons[0].style.visibility = 'hidden';
+failureIcons[1].style.visibility = 'hidden';
+failureIcons[2].style.visibility = 'hidden';
+
+
+// Valid email regex
 const correctEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-/*
-Activate click on submit ID and conditionally do these things
-*/
 
-document.getElementById('submit').addEventListener('click', 
-      (event) => {
-        event.preventDefault();
+// Activate click on submit ID and conditionally do these things
+document.getElementById('submit').addEventListener('click', (event) => {
+    event.preventDefault();
 
-        const userNameError = document.getElementsByClassName('error')[0];
-        const emailError = document.getElementsByClassName('error')[1];
-        const passwordError = document.getElementsByClassName('error')[2];
 
-        // change style of the messages
-        userNameError.style.color = 'red'
-        emailError.style.color = 'red'
-        passwordError.style.color = 'red'
+    // Grab error message elements
+    const userNameError = document.getElementsByClassName('error')[0];
+    const emailError = document.getElementsByClassName('error')[1];
+    const passwordError = document.getElementsByClassName('error')[2];
 
-        // Handle user inputs on user input area id (username, password, email), then grab value
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
 
-        // Failure icon visible upon empty form submission using the error class, change icon to red
-        // username => failure_icon ? empty : success_icon
-        if (username === ''){
-          userNameError.innerText = "Please enter field"
-        }
-        // email => failure_icon ? zero length or not meeting the pattern : success_icon
-        if (email === ''){
-          emailError.innerText = "Please enter field"
-        }
-        // password => failure_icon ? is < 8 chars : success_icon
-        if (password === ''){
-          passwordError.innerText = "Please enter field"
-        }
+    // Change style of the messages
+    userNameError.style.color = 'red';
+    emailError.style.color = 'red';
+    passwordError.style.color = 'red';
 
-        if (username !== '' && email !== "" && password !== ""){
-          userNameError.innerText = ''; 
-          // making success visible
-          successIcon[0].style.visibility = 'visible';
-          // make error hidden
-          failureIcon[0].style.visibility = 'hidden';
-        }
 
-        // email is valid
-        if (correctEmail.test(email)){
-          emailError.innerText = ''; 
-          // making success visible
-          successIcon[1].style.visibility = 'visible';
-          // make error hidden
-          failureIcon[1].style.visibility = 'hidden';
-        }
+    // Handle user inputs (username, email, password)
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-        // password at least 8 characters
-        if (password.length < 8){
-          passwordError.innerText = ''; 
-          // making success visible
-          successIcon[1].style.visibility = 'visible';
-          // make error hidden
-          failureIcon[1].style.visibility = 'hidden';
-        }
 
-        
-      }
-)
+    // Clear previous errors
+    userNameError.innerText = '';
+    emailError.innerText = '';
+    passwordError.innerText = '';
+
+
+    // Validation variable
+    let isValid = true;
+
+
+    // Username validation
+    if (username === '') {
+        userNameError.innerText = "Hey, what's your username?";
+        failureIcons[0].style.visibility = "visible";
+        successIcons[0].style.visibility = "hidden";
+        isValid = false;
+    } else {
+        successIcons[0].style.visibility = "visible";
+        failureIcons[0].style.visibility = "hidden";
+    }
+
+
+    // Email validation
+    if (email === '') {
+        emailError.innerText = "Hello, don't forget to put your email";
+        failureIcons[1].style.visibility = "visible";
+        successIcons[1].style.visibility = "hidden";
+        isValid = false;
+    } else if (!correctEmail.test(email)) {
+        emailError.innerText = "Please enter a valid email";
+        failureIcons[1].style.visibility = "visible";
+        successIcons[1].style.visibility = "hidden";
+        isValid = false;
+    } else {
+        successIcons[1].style.visibility = "visible";
+        failureIcons[1].style.visibility = "hidden";
+    }
+
+
+    // Password validation
+    if (password === '') {
+        passwordError.innerText = "Yo Yo Yo, your password is empty";
+        failureIcons[2].style.visibility = "visible";
+        successIcons[2].style.visibility = "hidden";
+        isValid = false;
+    } else if (password.length < 8) {
+        passwordError.innerText = "Oops, it has to be at least 8 characters";
+        failureIcons[2].style.visibility = "visible";
+        successIcons[2].style.visibility = "hidden";
+        isValid = false;
+    } else {
+        successIcons[2].style.visibility = "visible";
+        failureIcons[2].style.visibility = "hidden";
+    }
+
+
+    // If all fields are valid return message
+    if (isValid) {
+        console.log('Form submitted successfully:', { username, email, password });
+    }
+});
